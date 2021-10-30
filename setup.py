@@ -17,5 +17,5 @@ setup(
     descriprion=descriprion,
     version=version,
     install_requires=requirements,
-    # python_requires='>3.9',
+    python_requires='>3.6',
 )
