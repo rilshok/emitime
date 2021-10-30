@@ -4,7 +4,7 @@ from pathlib import Path
 from setuptools import find_packages, setup
 
 name = 'emitime'
-descriprion = 'Emit time from time!'
+descriprion = 'Emit time from any time!'
 version_path = Path(__file__).resolve().parent / name / '__version__.py'
 version = runpy.run_path(version_path)['__version__']
 
