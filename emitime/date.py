@@ -1,17 +1,20 @@
 __all__ = [
     'Date',
+    'Year',
+    'Month',
+    'Day',
 ]
 
 from typing import Any, Optional, Tuple, Union
 
-from emitime import datetime as dt
+from emitime.datetime import DateTime
 from emitime import time as t
 from datetime import date as py_date
 from datetime import datetime as py_datetime
 
 
 AnyDelta = Union[int, float, str, t.Atomic, t.Days, t.Hours, t.Minutes, t.Seconds, 'Year', 'Day', 'Month']
-AnyDate = Union[str, py_date, 'Date', dt.DateTime]
+AnyDate = Union[str, py_date, 'Date', DateTime]
 
 class Year(int):
     def __new__(cls, value) -> int:
@@ -143,7 +146,7 @@ class Date:
             elif isinstance(value, Date):
                 self._date = value._date
                 return
-            elif isinstance(value, dt.DateTime):
+            elif isinstance(value, DateTime):
                 self._date = value.date._date
                 return
             elif isinstance(value, py_date):
@@ -219,24 +222,29 @@ class Date:
         )
 
     def __lt__(self, other: AnyDate) -> bool: # <
-        raise NotImplementedError
+        return self.py_date < Date(other).py_date
 
     def __le__(self, other: AnyDate) -> bool: # <=
-        raise NotImplementedError
+        return self.py_date <= Date(other).py_date
 
     def __gt__(self, other: AnyDate) -> bool: # >
-        raise NotImplementedError
+        return self.py_date > Date(other).py_date
 
     def __ge__(self, other: AnyDate) -> bool: # >=
-        raise NotImplementedError
+        return self.py_date >= Date(other).py_date
 
     def __eq__(self, other: AnyDate) -> bool: # ==
-        raise NotImplementedError
+        return self.py_date == Date(other).py_date
 
     def __ne__(self, other: AnyDate) -> bool:
-        raise NotImplementedError
+        return self.py_date != Date(other).py_date
 
-    def __add__(self, other: AnyDelta) -> Union['Date', dt.DateTime]:
+    def __add__(self, other: AnyDelta) -> Union['Date', DateTime]:
+        if not isinstance(other, t.Atomic):
+            other = t.Time(other)
+        
+
+        t.Time(other)
         raise NotImplementedError
 
     @t.uptype
