@@ -12,7 +12,7 @@ from datetime import timedelta as py_timedelta
 
 from typing import Tuple, Union
 
-AnyTime = Union[float, str, 'Atomic', 'Days', 'Hours', 'Minutes', 'Seconds']
+AnyTime = Union[float, str, py_timedelta, 'Atomic', 'Days', 'Hours', 'Minutes', 'Seconds']
 
 def _num_to_str(num):
     if round(num) == num:
