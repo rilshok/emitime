@@ -2,11 +2,12 @@ __all__ = [
     'Date',
 ]
 
-from typing import Any, Tuple, Union
+from typing import Any, Optional, Tuple, Union
 
 from emitime import datetime as dt
 from emitime import time as t
 from datetime import date as py_date
+from datetime import datetime as py_datetime
 
 
 AnyDelta = Union[int, float, str, t.Atomic, t.Days, t.Hours, t.Minutes, t.Seconds, 'Year', 'Day', 'Month']
@@ -124,7 +125,16 @@ class DateString(str):
         return obj
 
 class Date:
-    def __init__(self, *args, year=None, month=None, day=None) -> None:
+    def __init__(self, *args, year: Any=None, month: Any=None, day: Any=None, format: Optional[str]=None) -> None:
+        if len(args) == 2 and isinstance(args[0], str) and isinstance(args[1], str):
+            format = args[1]
+            args = [args[0]]
+        if format is not None:
+            if len(args) == 1 and isinstance(args[0], str):
+                self._date = py_datetime.strptime(args[0], format).date()
+                return
+            else:
+                raise NotImplementedError
         kw_empty = year is None or month is None or day is None
         if len(args) == 1 and kw_empty:
             value = args[0]
