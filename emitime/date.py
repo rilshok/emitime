@@ -11,7 +11,7 @@ from datetime import datetime as py_datetime
 
 
 AnyDelta = Union[int, float, str, t.Atomic, t.Days, t.Hours, t.Minutes, t.Seconds, 'Year', 'Day', 'Month']
-AnyDate = Union[str, py_date, 'Date']
+AnyDate = Union[str, py_date, 'Date', dt.DateTime]
 
 class Year(int):
     def __new__(cls, value) -> int:
@@ -142,6 +142,9 @@ class Date:
                 year, month, day = _string_to_ymd(value)
             elif isinstance(value, Date):
                 self._date = value._date
+                return
+            elif isinstance(value, dt.DateTime):
+                self._date = value.date._date
                 return
             elif isinstance(value, py_date):
                 self._date = value
