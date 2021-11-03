@@ -1,6 +1,6 @@
 __all__ = [
-    'Atomic',
     'Time',
+    'Atomic',
     'Seconds',
     'Minutes',
     'Hours',
@@ -521,6 +521,7 @@ class Hours(Atomic):
             other = Hours(other)
         return super().__sub__(other)
 
+# FIXME: Days('10')
 class Days(Atomic):
     def __init__(self, amount):
         if isinstance(amount, (int, float)):
