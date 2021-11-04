@@ -9,7 +9,7 @@ __all__ = [
 ]
 
 from datetime import timedelta as py_timedelta
-
+from datetime import time as py_time
 from typing import Tuple, Union
 
 AnyTime = Union[float, str, py_timedelta, 'Atomic', 'Days', 'Hours', 'Minutes', 'Seconds']
@@ -110,6 +110,8 @@ class Atomic:
             value = value.atomic
         if isinstance(value, py_timedelta):
             value = value.total_seconds() * 1000.
+        if isinstance(value, py_time):
+            value = int(Hours(value.hour) + Minutes(value.minute) + Seconds(value.second) + Atomic(int(value.microsecond / 1000)))
         if not isinstance(value, (float, int)):
             raise NotImplementedError
         self._value = int(value)
@@ -306,15 +308,7 @@ class Atomic:
     @property
     def pytimedelta(self) -> py_timedelta:
         t = Time(self)
-        return py_timedelta(
-            days=t.days_in.days,
-            # weeks=...,
-            hours=t.hours_in.hours,
-            minutes=t.minutes_in.minutes,
-            seconds=t.seconds_in.seconds,
-            # microseconds=...,
-            milliseconds=t.atomic_in.atomic,
-        )
+        return py_timedelta(seconds=t.seconds)
 
     @pytimedelta.setter
     def pytimedelta(self, other) -> None:

@@ -134,7 +134,7 @@ class Date:
             args = [args[0]]
         if format is not None:
             if len(args) == 1 and isinstance(args[0], str):
-                self._date = py_datetime.strptime(args[0], format).date()
+                self.py_date = py_datetime.strptime(args[0], format).date()
                 return
             else:
                 raise NotImplementedError
@@ -144,13 +144,13 @@ class Date:
             if isinstance(value, str):
                 year, month, day = _string_to_ymd(value)
             elif isinstance(value, Date):
-                self._date = value._date
+                self.py_date = value.py_date
                 return
             elif isinstance(value, DateTime):
-                self._date = value.date._date
+                self.py_date = value.date.py_date
                 return
             elif isinstance(value, py_date):
-                self._date = value
+                self.py_date = value
                 return
         elif len(args) == 3 and kw_empty:
             year = Year(args[0])
@@ -165,7 +165,7 @@ class Date:
             month = Month(month)
         if not isinstance(day, Day):
             day = Day(day)
-        self._date = py_date(
+        self.py_date = py_date(
             year = int(year),
             month = int(month),
             day = int(day)
@@ -183,6 +183,7 @@ class Date:
 
     @py_date.setter
     def py_date(self, value) -> None:
+        assert isinstance(value, py_date)
         self._date = value
 
     @property
@@ -242,10 +243,8 @@ class Date:
     def __add__(self, other: AnyDelta) -> Union['Date', DateTime]:
         if not isinstance(other, t.Atomic):
             other = t.Time(other)
-        
+        return DateTime(self, other)
 
-        t.Time(other)
-        raise NotImplementedError
 
     @t.uptype
     def __sub__(self, other: AnyDate) -> AnyDelta:
