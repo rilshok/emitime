@@ -322,7 +322,7 @@ def asatomic(*anytime: AnyTime, **anytimekw) -> Atomic:
         # m, s
         assert 'hours' not in anytimekw
         assert 'minutes' not in anytimekw
-        is_ms = isinstance(anytime[0], Hours) and isinstance(anytime[0], Minutes)
+        is_ms = isinstance(anytime[0], Hours) and isinstance(anytime[0], Minutes) #Fix
         is_ms_f = all([isinstance(at, (float, int)) for at in anytime])
         if is_ms:
             atomic += anytime[0].atomic
