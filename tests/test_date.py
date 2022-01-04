@@ -18,8 +18,16 @@ def test_create_date_by_string():
     assert d.day == 16
 
 def test_date_to_str():
-    assert str(Date(year=1992, month=1, day=2)) == '1992-01-02'
-    assert str(Date(year=1993, month=12, day=12)) == '1993-12-12'
+    d1 = Date(year=1992, month=1, day=2)
+    d2 = Date(year=1993, month=12, day=12)
+    assert str(d1) == '1992-01-02'
+    assert str(d2) == '1993-12-12'
+    assert str(d1.year) == '1992 year'
+    assert str(d1.month) == 'jan'
+    assert str(d1.month).long == 'January'
+    assert str(d1.day) == '2 day'
+    assert str(d1).ru == '02.01.1992'
+    assert str(d1).eng_long == '2 jan 1992'
 
 def test_date_comparison():
     d1 = Date(year=1992, month=1, day=2)
