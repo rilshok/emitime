@@ -11,6 +11,12 @@ def test_create_date_by_pydate():
     assert d.pydate == pyd
     assert d == pyd
 
+def test_create_date_by_string():
+    d = Date('2014-03-16')
+    assert d.year == 2014
+    assert d.month == 3
+    assert d.day == 16
+
 def test_date_to_str():
     assert str(Date(year=1992, month=1, day=2)) == '1992-01-02'
     assert str(Date(year=1993, month=12, day=12)) == '1993-12-12'
@@ -26,3 +32,8 @@ def test_date_comparison():
     assert d2 == d3
     assert d1 < d2.pydate
     assert d2.pydate > d1
+
+def test_date_arithmetic():
+    pyd1 = dt.date(year=1992, month=1, day=2)
+    pyd2 = dt.date(year=1993, month=12, day=12)
+    # Date(pyd2) - Date(pyd1) ==== pyd2-pyd1
