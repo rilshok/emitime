@@ -47,7 +47,7 @@ class MonthString(str):
         return obj
 
 class Month(int):
-    def __new__(cls, value) -> int:
+    def __new__(cls, value) -> 'Month':
         if isinstance(value, str):
             value = value.lower()
             if value.isnumeric():
@@ -134,7 +134,7 @@ class Date:
             args = [args[0]]
         if format is not None:
             if len(args) == 1 and isinstance(args[0], str):
-                self.py_date = py_datetime.strptime(args[0], format).date()
+                self.pydate = py_datetime.strptime(args[0], format).date()
                 return
             else:
                 raise NotImplementedError
@@ -144,13 +144,13 @@ class Date:
             if isinstance(value, str):
                 year, month, day = _string_to_ymd(value)
             elif isinstance(value, Date):
-                self.py_date = value.py_date
+                self.pydate = value.pydate
                 return
             elif isinstance(value, DateTime):
-                self.py_date = value.date.py_date
+                self.pydate = value.date.pydate
                 return
             elif isinstance(value, py_date):
-                self.py_date = value
+                self.pydate = value
                 return
         elif len(args) == 3 and kw_empty:
             year = Year(args[0])
@@ -165,7 +165,7 @@ class Date:
             month = Month(month)
         if not isinstance(day, Day):
             day = Day(day)
-        self.py_date = py_date(
+        self.pydate = py_date(
             year = int(year),
             month = int(month),
             day = int(day)
@@ -178,21 +178,21 @@ class Date:
         return str(str(self))
 
     @property
-    def py_date(self) -> py_date:
+    def pydate(self) -> py_date:
         return self._date
 
-    @py_date.setter
-    def py_date(self, value) -> None:
+    @pydate.setter
+    def pydate(self, value) -> None:
         assert isinstance(value, py_date)
         self._date = value
 
     @property
     def year(self) -> Year:
-        return Year(self.py_date.year)
+        return Year(self.pydate.year)
 
     @year.setter
     def year(self, value: Any) -> None:
-        self.py_date = py_date(
+        self.pydate = py_date(
             year = int(Year(value)),
             month = int(self.month),
             day = int(self.day)
@@ -200,11 +200,11 @@ class Date:
 
     @property
     def month(self) -> Month:
-        return Month(self.py_date.month)
+        return Month(self.pydate.month)
 
     @month.setter
     def month(self, value: Any) -> None:
-        self.py_date = py_date(
+        self.pydate = py_date(
             year = int(self.year),
             month = int(Month(value)),
             day = int(self.day),
@@ -212,33 +212,33 @@ class Date:
 
     @property
     def day(self) -> Day:
-        return Day(self.py_date.day)
+        return Day(self.pydate.day)
 
     @day.setter
     def day(self, value: Any) -> None:
-        self.py_date = py_date(
+        self.pydate = py_date(
             year = int(self.year),
             month = int(self.month),
             day = int(Day(value)),
         )
 
     def __lt__(self, other: AnyDate) -> bool: # <
-        return self.py_date < Date(other).py_date
+        return self.pydate < Date(other).pydate
 
     def __le__(self, other: AnyDate) -> bool: # <=
-        return self.py_date <= Date(other).py_date
+        return self.pydate <= Date(other).pydate
 
     def __gt__(self, other: AnyDate) -> bool: # >
-        return self.py_date > Date(other).py_date
+        return self.pydate > Date(other).pydate
 
     def __ge__(self, other: AnyDate) -> bool: # >=
-        return self.py_date >= Date(other).py_date
+        return self.pydate >= Date(other).pydate
 
     def __eq__(self, other: AnyDate) -> bool: # ==
-        return self.py_date == Date(other).py_date
+        return self.pydate == Date(other).pydate
 
     def __ne__(self, other: AnyDate) -> bool:
-        return self.py_date != Date(other).py_date
+        return self.pydate != Date(other).pydate
 
     def __add__(self, other: AnyDelta) -> Union['Date', DateTime]:
         if not isinstance(other, t.Atomic):

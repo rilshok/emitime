@@ -7,3 +7,5 @@ def test_create_date_by_pydate():
     assert d.year == pyd.year
     assert d.month == pyd.month
     assert d.day == pyd.day
+    assert d.pydate == pyd
+    assert d == pyd
