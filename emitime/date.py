@@ -5,13 +5,12 @@ __all__ = [
     "Day",
 ]
 
-from typing import Any, Optional, Tuple, Union
-
-from emitime.datetime import DateTime
-from emitime import time as t
 from datetime import date as py_date
 from datetime import datetime as py_datetime
+from typing import Any, Optional, Tuple, Union
 
+from emitime import time as t
+from emitime.datetime import DateTime
 
 AnyDelta = Union[
     int,
