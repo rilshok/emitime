@@ -132,6 +132,30 @@ class Moment:
         """moment + interval -> moment"""
         return Moment(self.datetime + convert(other, dt.timedelta))
 
+    @dispatch
+    def __lt__(self, other: LikeMoment) -> bool:
+        return self.datetime < convert(other, dt.datetime)
+
+    @dispatch
+    def __le__(self, other: LikeMoment) -> bool:
+        return self.datetime <= convert(other, dt.datetime)
+
+    @dispatch
+    def __eq__(self, other: LikeMoment) -> bool:
+        return self.datetime == convert(other, dt.datetime)
+
+    @dispatch
+    def __ne__(self, other: LikeMoment) -> bool:
+        return self.datetime != convert(other, dt.datetime)
+
+    @dispatch
+    def __gt__(self, other: LikeMoment) -> bool:
+        return self.datetime > convert(other, dt.datetime)
+
+    @dispatch
+    def __ge__(self, other: LikeMoment) -> bool:
+        return self.datetime >= convert(other, dt.datetime)
+
     def __str__(self) -> str:
         return convert(self.datetime, str)
 
