@@ -77,6 +77,16 @@ class Interval:
         """this - interval -> interval"""
         return Interval(self.timedelta - upI(other))
 
+    def __rsub__(
+        self, other: Union["Interval", "Moment"]
+    ) -> Union["Interval", "Moment"]:
+        """(interval|moment) - this -> (interval|moment)"""
+        if is_interval(other):
+            return Interval(upI(other) - self.timedelta)
+        elif is_moment(other):
+            return Moment(upM(other) - self.timedelta)
+        raise NotImplementedError
+
     @dispatch
     def __mul__(self, other: Number) -> "Interval":
         """this * Number -> interval"""
@@ -145,6 +155,7 @@ class Interval:
 
     def __float__(self) -> float:
         raise NotImplementedError
+
 
 class Moment:
     def __init__(self, value) -> None:
