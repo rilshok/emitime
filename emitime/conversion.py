@@ -84,7 +84,13 @@ def str_to_timedelta(value: str) -> dt.timedelta:
 
 
 def add_conversion_methods():
+    from emitime.base import Interval, Moment
+
     add_conversion_method(type_from=str, type_to=dt.datetime, f=str_to_datetime)
     add_conversion_method(type_from=dt.datetime, type_to=str, f=datetime_to_str)
     add_conversion_method(type_from=str, type_to=dt.timedelta, f=str_to_timedelta)
     add_conversion_method(type_from=dt.timedelta, type_to=str, f=timedelta_to_str)
+    add_conversion_method(
+        type_from=Interval, type_to=dt.timedelta, f=lambda x: x.timedelta
+    )
+    add_conversion_method(type_from=Moment, type_to=dt.datetime, f=lambda x: x.datetime)

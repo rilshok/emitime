@@ -1,18 +1,21 @@
 import datetime as dt
 from numbers import Number
-from typing import Any, Union
 
 from plum import convert, dispatch
 
 from emitime.conversion import add_conversion_methods
-from emitime.date import DateString
+from plum.type import PromisedType, Union
 
-add_conversion_methods()
 
-LikeInterval = Union[str, dt.timedelta, "Interval"]
+IntervalType = PromisedType()
+MomentType = PromisedType()
+
+LikeInterval = Union[str, dt.timedelta, IntervalType]
+LikeMoment = Union[str, dt.date, dt.datetime, MomentType]
+
 
 class Interval:
-    def __init__(self, value: Any) -> None:
+    def __init__(self, value) -> None:
         self.timedelta = value
 
     @property
@@ -24,14 +27,15 @@ class Interval:
         self._value = convert(value, dt.timedelta)
 
     @dispatch
-    def __add__(self, other: "Interval") -> "Interval":
+    def __add__(self, other: LikeInterval) -> "Interval":
         """interval + interval -> interval"""
-        return Interval(self.timedelta + other.timedelta)
+        print("interval add")
+        return Interval(self.timedelta + convert(other, dt.timedelta))
 
     @dispatch
-    def __sub__(self, other: "Interval") -> "Interval":
+    def __sub__(self, other: LikeInterval) -> "Interval":
         """interval - interval -> interval"""
-        return Interval(self.timedelta - other.timedelta)
+        return Interval(self.timedelta - convert(other, dt.timedelta))
 
     @dispatch
     def __mul__(self, other: Number) -> "Interval":
@@ -39,9 +43,9 @@ class Interval:
         return Interval(self.timedelta * other)
 
     @dispatch
-    def __truediv__(self, other: "Interval") -> float:
+    def __truediv__(self, other: LikeInterval) -> float:
         """interval / interval -> float"""
-        return self.timedelta / other.timedelta
+        return self.timedelta / convert(other, dt.timedelta)
 
     @dispatch
     def __truediv__(self, other: Number) -> "Interval":
@@ -49,14 +53,14 @@ class Interval:
         return Interval(self.timedelta / other)
 
     @dispatch
-    def __floordiv__(self, other: "Interval") -> int:
+    def __floordiv__(self, other: LikeInterval) -> int:
         """interval // interval -> int"""
-        return self.timedelta // other.timedelta
+        return self.timedelta // convert(other, dt.timedelta)
 
     @dispatch
-    def __mod__(self, other: "Interval") -> "Interval":
+    def __mod__(self, other: LikeInterval) -> "Interval":
         """interval % interval -> interval"""
-        return Interval(self.timedelta % other.timedelta)
+        return Interval(self.timedelta % convert(other, dt.timedelta))
 
     def __str__(self) -> str:
         return convert(self.timedelta, str)
@@ -64,8 +68,9 @@ class Interval:
     def __repr__(self) -> str:
         return str(self)
 
+
 class Moment:
-    def __init__(self, value: Any) -> None:
+    def __init__(self, value) -> None:
         self.datetime = value
 
     @property
@@ -73,32 +78,41 @@ class Moment:
         return self._value
 
     @datetime.setter
-    def datetime(self, value) -> None:
+    def datetime(self, value: LikeMoment) -> None:
         self._value = convert(value, dt.datetime)
 
     @dispatch
-    def __sub__(self, other: "Moment") -> Interval:
-        return Interval(self.datetime - other.datetime)
+    def __sub__(self, other: LikeMoment) -> Interval:
+        return Interval(self.datetime - convert(other, dt.datetime))
 
     @dispatch
-    def __sub__(self, other: Interval) -> "Moment":
-        return Moment(self.datetime - other.timedelta)
+    def __sub__(self, other: LikeInterval) -> "Moment":
+        return Moment(self.datetime - convert(other, dt.timedelta))
 
     @dispatch
-    def __add__(self, other: Interval) -> "Moment":
+    def __add__(self, other: LikeInterval) -> "Moment":
         """moment + interval -> moment"""
-        return Moment(self.datetime + other.timedelta)
+        return Moment(self.datetime + convert(other, dt.timedelta))
 
-    def __add__(self, other):
-        return self + convert(other, Interval)
-
-    @dispatch
-    def __radd__(self, other: Interval) -> "Moment":
-        """interval + datetime -> moment"""
-        return self + other
+    # @dispatch
+    # def __radd__(self, other: LikeInterval) -> "Moment":
+    #     """interval + datetime -> moment"""
+    #     return self + other
 
     def __str__(self) -> str:
         return convert(self.datetime, str)
 
     def __repr__(self) -> str:
         return str(self)
+
+
+IntervalType.deliver(Interval)
+MomentType.deliver(Moment)
+
+add_conversion_methods()
+
+
+# add_conversion_method(
+#     type_from=LikeInterval, type_to=dt.timedelta, f=lambda x: Interval(x).timedelta
+# )
+# add_conversion_method(type_from=LikeMoment, type_to=dt.datetime, f=lambda x: Moment(x).datetime)
