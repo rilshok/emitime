@@ -69,7 +69,7 @@ class Interval:
     def __radd__(
         self, other: Union["Interval", "Moment"]
     ) -> Union["Interval", "Moment"]:
-        """moment + this -> moment"""
+        """(interval|moment) + this -> (interval|moment)"""
         return self + other
 
     @dispatch
