@@ -74,6 +74,30 @@ class Interval:
         """interval % interval -> interval"""
         return Interval(self.timedelta % convert(other, dt.timedelta))
 
+    @dispatch
+    def __lt__(self, other: LikeInterval) -> bool:
+        return self.timedelta < convert(other, dt.timedelta)
+
+    @dispatch
+    def __le__(self, other: LikeInterval) -> bool:
+        return self.timedelta <= convert(other, dt.timedelta)
+
+    @dispatch
+    def __eq__(self, other: LikeInterval) -> bool:
+        return self.timedelta == convert(other, dt.timedelta)
+
+    @dispatch
+    def __ne__(self, other: LikeInterval) -> bool:
+        return self.timedelta != convert(other, dt.timedelta)
+
+    @dispatch
+    def __gt__(self, other: LikeInterval) -> bool:
+        return self.timedelta > convert(other, dt.timedelta)
+
+    @dispatch
+    def __ge__(self, other: LikeInterval) -> bool:
+        return self.timedelta >= convert(other, dt.timedelta)
+
     def __str__(self) -> str:
         return convert(self.timedelta, str)
 
