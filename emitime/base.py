@@ -29,8 +29,12 @@ class Interval:
     @dispatch
     def __add__(self, other: LikeInterval) -> "Interval":
         """interval + interval -> interval"""
-        print("interval add")
         return Interval(self.timedelta + convert(other, dt.timedelta))
+
+    @dispatch
+    def __add__(self, other: LikeMoment) -> "Moment":
+        """interval + moment -> moment"""
+        return Moment(convert(other, dt.datetime) + self.timedelta)
 
     @dispatch
     def __sub__(self, other: LikeInterval) -> "Interval":
