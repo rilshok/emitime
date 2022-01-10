@@ -26,76 +26,82 @@ class Interval:
 
     @dispatch
     def __add__(self, other: LikeInterval) -> "Interval":
-        """interval + interval -> interval"""
+        """this + interval -> interval"""
         return Interval(self.timedelta + convert(other, dt.timedelta))
 
     @dispatch
     def __add__(self, other: LikeMoment) -> "Moment":
-        """interval + moment -> moment"""
+        """this + moment -> moment"""
         return Moment(convert(other, dt.datetime) + self.timedelta)
 
     @dispatch
     def __radd__(self, other: LikeMoment) -> "Moment":
-        """moment + interval -> moment"""
-        return Moment(convert(other, dt.datetime) + self.timedelta)
+        """moment + this -> moment"""
+        return Moment(other) + self
 
     @dispatch
     def __sub__(self, other: LikeInterval) -> "Interval":
-        """interval - interval -> interval"""
+        """this - interval -> interval"""
         return Interval(self.timedelta - convert(other, dt.timedelta))
 
     @dispatch
     def __mul__(self, other: Number) -> "Interval":
-        """interval * Number -> interval"""
+        """this * Number -> interval"""
         return Interval(self.timedelta * other)
 
     @dispatch
     def __rmul__(self, other: Number) -> "Interval":
-        """interval * Number -> interval"""
+        """Number * this -> interval"""
         return self * other
 
     @dispatch
     def __truediv__(self, other: LikeInterval) -> float:
-        """interval / interval -> float"""
+        """this / interval -> float"""
         return self.timedelta / convert(other, dt.timedelta)
 
     @dispatch
     def __truediv__(self, other: Number) -> "Interval":
-        """interval / Number -> interval"""
+        """this / Number -> interval"""
         return Interval(self.timedelta / other)
 
     @dispatch
     def __floordiv__(self, other: LikeInterval) -> int:
-        """interval // interval -> int"""
+        """this // interval -> int"""
         return self.timedelta // convert(other, dt.timedelta)
 
     @dispatch
     def __mod__(self, other: LikeInterval) -> "Interval":
-        """interval % interval -> interval"""
+        """this % interval -> interval"""
         return Interval(self.timedelta % convert(other, dt.timedelta))
 
     @dispatch
     def __lt__(self, other: LikeInterval) -> bool:
+        """this < interval -> bool"""
         return self.timedelta < convert(other, dt.timedelta)
 
     @dispatch
     def __le__(self, other: LikeInterval) -> bool:
+        """this <= interval -> bool"""
         return self.timedelta <= convert(other, dt.timedelta)
 
     @dispatch
     def __eq__(self, other: LikeInterval) -> bool:
+        """this == interval -> bool"""
         return self.timedelta == convert(other, dt.timedelta)
 
     @dispatch
     def __ne__(self, other: LikeInterval) -> bool:
+        """this != interval -> bool"""
         return self.timedelta != convert(other, dt.timedelta)
 
     @dispatch
     def __gt__(self, other: LikeInterval) -> bool:
+        """this > interval -> bool"""
         return self.timedelta > convert(other, dt.timedelta)
 
     @dispatch
     def __ge__(self, other: LikeInterval) -> bool:
+        """this >= interval -> bool"""
         return self.timedelta >= convert(other, dt.timedelta)
 
     def __str__(self) -> str:
@@ -119,41 +125,52 @@ class Moment:
 
     @dispatch
     def __sub__(self, other: LikeMoment) -> Interval:
-        """moment - moment -> interval"""
+        """this - moment -> interval"""
         return Interval(self.datetime - convert(other, dt.datetime))
 
     @dispatch
     def __sub__(self, other: LikeInterval) -> "Moment":
-        """moment - interval -> moment"""
+        """this - interval -> moment"""
         return Moment(self.datetime - convert(other, dt.timedelta))
 
     @dispatch
+    def __rsub__(self, other: LikeMoment) -> Interval:
+        """moment - this -> interval"""
+        return Moment(other) - self
+
+    @dispatch
     def __add__(self, other: LikeInterval) -> "Moment":
-        """moment + interval -> moment"""
+        """this + interval -> moment"""
         return Moment(self.datetime + convert(other, dt.timedelta))
 
     @dispatch
     def __lt__(self, other: LikeMoment) -> bool:
+        """this < moment -> bool"""
         return self.datetime < convert(other, dt.datetime)
 
     @dispatch
     def __le__(self, other: LikeMoment) -> bool:
+        """this <= moment -> bool"""
         return self.datetime <= convert(other, dt.datetime)
 
     @dispatch
     def __eq__(self, other: LikeMoment) -> bool:
+        """this == moment -> bool"""
         return self.datetime == convert(other, dt.datetime)
 
     @dispatch
     def __ne__(self, other: LikeMoment) -> bool:
+        """this != moment -> bool"""
         return self.datetime != convert(other, dt.datetime)
 
     @dispatch
     def __gt__(self, other: LikeMoment) -> bool:
+        """this > moment -> bool"""
         return self.datetime > convert(other, dt.datetime)
 
     @dispatch
     def __ge__(self, other: LikeMoment) -> bool:
+        """this >= moment -> bool"""
         return self.datetime >= convert(other, dt.datetime)
 
     def __str__(self) -> str:
