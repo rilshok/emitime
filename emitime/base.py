@@ -83,21 +83,18 @@ class Moment:
 
     @dispatch
     def __sub__(self, other: LikeMoment) -> Interval:
+        """moment - moment -> interval"""
         return Interval(self.datetime - convert(other, dt.datetime))
 
     @dispatch
     def __sub__(self, other: LikeInterval) -> "Moment":
+        """moment - interval -> moment"""
         return Moment(self.datetime - convert(other, dt.timedelta))
 
     @dispatch
     def __add__(self, other: LikeInterval) -> "Moment":
         """moment + interval -> moment"""
         return Moment(self.datetime + convert(other, dt.timedelta))
-
-    # @dispatch
-    # def __radd__(self, other: LikeInterval) -> "Moment":
-    #     """interval + datetime -> moment"""
-    #     return self + other
 
     def __str__(self) -> str:
         return convert(self.datetime, str)
@@ -110,9 +107,3 @@ IntervalType.deliver(Interval)
 MomentType.deliver(Moment)
 
 add_conversion_methods()
-
-
-# add_conversion_method(
-#     type_from=LikeInterval, type_to=dt.timedelta, f=lambda x: Interval(x).timedelta
-# )
-# add_conversion_method(type_from=LikeMoment, type_to=dt.datetime, f=lambda x: Moment(x).datetime)
