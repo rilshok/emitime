@@ -34,7 +34,25 @@ def microseconds(value: SplitSeconds) -> int:
 
 
 def str_to_date(value: str) -> dt.date:
-    raise NotImplementedError
+    if "-" in value:  # eng format
+        ymd = value.split("-")
+    elif "." in value:  # ru format
+        ymd = value.split(".")[::-1]
+    elif "/" in value:  # eng format
+        ymd = value.split("/")
+    else:
+        raise NotImplementedError
+    assert all([*map(str.isnumeric, ymd)])
+    assert len(ymd) == 3
+    year, month, day = ymd
+    if len(year) == 2:
+        # short year
+        assert dt.date.today().year < 2035
+        if int(year) <= 35:
+            year = "20" + year
+        else:
+            year = "19" + year
+    return dt.date(year=int(year), month=int(month), day=int(day))
 
 
 def date_to_str(value: dt.date) -> str:
@@ -74,11 +92,11 @@ def time_to_str(value: dt.time) -> str:
 
 def datetime_to_str(value: dt.datetime) -> str:
     date = date_to_str(value.date())
-    time = time_to_str(value.time())
-    if not time:
+    t = value.time()
+    if t == dt.time():
         return date
-    return f"{date}^{time}"
-
+    time = time_to_str(t)
+    return f"{date}d{time}".replace('+','')
 
 def str_to_timedelta(value: str) -> dt.timedelta:
     try:
@@ -169,7 +187,7 @@ def str_to_datetime(value: str) -> dt.datetime:
             time = str_to_time(split[1])
         else:
             date = str_to_date(value)
-            time = dt.timedelta()
+            time = dt.time()
 
     except Exception:
         need_format = (
