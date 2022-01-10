@@ -50,23 +50,27 @@ def str_to_timedelta(value: str) -> dt.timedelta:
         if value.startswith("-"):
             sign = -1.0
             value = value[1:]
-        if "^" in value:
-            split = value.split("^")
+        if "^" in value or "d" in value:
+            if "^" in value:
+                split = value.split("^")
+            else:
+                split = value.split("d")
             value = split[-1]
             d = int(split[0])
-        if "." in value:
-            split = value.split(".")
-            value = split[0]
-            msμs = split[-1]
-            if "'" in msμs:
-                ms, μs = [*map(int, msμs.split("'"))]
-            else:
-                ms = int(msμs)
-        split = value.split(":")
-        h = int(split[0])
-        m = int(split[1])
-        if len(split) == 3:
-            s = int(split[2])
+        if value:
+            if "." in value:
+                split = value.split(".")
+                value = split[0]
+                msμs = split[-1]
+                if "'" in msμs:
+                    ms, μs = [*map(int, msμs.split("'"))]
+                else:
+                    ms = int(msμs)
+            split = value.split(":")
+            h = int(split[0])
+            m = int(split[1])
+            if len(split) == 3:
+                s = int(split[2])
         assert (
             0 <= h < 24
             and 0 <= m < 60
@@ -83,6 +87,12 @@ def str_to_timedelta(value: str) -> dt.timedelta:
     return dt.timedelta(microseconds=sign * total)
 
 
+def date_to_datetime(value: dt.date) -> dt.datetime:
+    if isinstance(value, dt.datetime):
+        return value
+    return dt.datetime(value.year, value.month, value.day)
+
+
 def add_conversion_methods():
     from emitime.base import Interval, Moment
 
@@ -94,3 +104,4 @@ def add_conversion_methods():
         type_from=Interval, type_to=dt.timedelta, f=lambda x: x.timedelta
     )
     add_conversion_method(type_from=Moment, type_to=dt.datetime, f=lambda x: x.datetime)
+    add_conversion_method(type_from=dt.date, type_to=dt.datetime, f=date_to_datetime)
