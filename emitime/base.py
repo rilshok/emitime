@@ -1,5 +1,5 @@
 import datetime as dt
-from numbers import Number
+from numbers import Real
 
 from plum import convert, dispatch
 
@@ -10,7 +10,7 @@ from plum.type import PromisedType, Union
 IntervalType = PromisedType()
 MomentType = PromisedType()
 
-LikeInterval = Union[str, dt.timedelta, IntervalType]
+LikeInterval = Union[str, dt.timedelta, dt.time, IntervalType]
 LikeMoment = Union[str, dt.date, dt.datetime, MomentType]
 
 
@@ -42,13 +42,13 @@ class Interval:
         return Interval(self.timedelta - convert(other, dt.timedelta))
 
     @dispatch
-    def __mul__(self, other: Number) -> "Interval":
-        """interval * Number -> interval"""
+    def __mul__(self, other: Real) -> "Interval":
+        """interval * Real -> interval"""
         return Interval(self.timedelta * other)
 
     @dispatch
-    def __rmul__(self, other: Number) -> "Interval":
-        """interval * Number -> interval"""
+    def __rmul__(self, other: Real) -> "Interval":
+        """interval * Real -> interval"""
         return self * other
 
     @dispatch
@@ -57,8 +57,8 @@ class Interval:
         return self.timedelta / convert(other, dt.timedelta)
 
     @dispatch
-    def __truediv__(self, other: Number) -> "Interval":
-        """interval / Number -> interval"""
+    def __truediv__(self, other: Real) -> "Interval":
+        """interval / Real -> interval"""
         return Interval(self.timedelta / other)
 
     @dispatch
