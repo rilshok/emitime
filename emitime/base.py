@@ -1,9 +1,15 @@
 import datetime as dt
+from typing import Any
 
 from plum import convert, dispatch
-
-from emitime.conversion import Number, add_conversion_methods
 from plum.type import PromisedType, Union
+
+from emitime.conversion import (
+    Number,
+    add_conversion_methods,
+    is_moment_str,
+    is_time_str,
+)
 
 IntervalType = PromisedType()
 MomentType = PromisedType()
@@ -15,8 +21,28 @@ LikeMoment = Union[str, dt.date, dt.datetime, MomentType]
 def upI(value: LikeInterval) -> dt.timedelta:
     return convert(value, dt.timedelta)
 
+
 def upM(value: LikeMoment) -> dt.datetime:
     return convert(value, dt.datetime)
+
+
+def is_interval(value: Any) -> bool:
+    if isinstance(value, (dt.timedelta, dt.time, Interval)):
+        return True
+    if isinstance(value, str):
+        if is_time_str(value):
+            return True
+    return False
+
+
+def is_moment(value: Any) -> bool:
+    if isinstance(value, (dt.date, dt.datetime, Moment)):
+        return True
+    if isinstance(value, str):
+        if is_moment_str(value):
+            return True
+    return False
+
 
 class Interval:
     def __init__(self, value) -> None:
@@ -30,20 +56,21 @@ class Interval:
     def timedelta(self, value) -> None:
         self._value = convert(value, dt.timedelta)
 
-    @dispatch
-    def __add__(self, other: LikeInterval) -> "Interval":
-        """this + interval -> interval"""
-        return Interval(self.timedelta + upI(other))
+    def __add__(
+        self, other: Union["Interval", "Moment"]
+    ) -> Union["Interval", "Moment"]:
+        """this + (interval|moment) -> (interval|moment)"""
+        if is_interval(other):
+            return Interval(self.timedelta + upI(other))
+        elif is_moment(other):
+            return Moment(upM(other) + self.timedelta)
+        raise NotImplementedError
 
-    @dispatch
-    def __add__(self, other: LikeMoment) -> "Moment":
-        """this + moment -> moment"""
-        return Moment(upM(other) + self.timedelta)
-
-    @dispatch
-    def __radd__(self, other: LikeMoment) -> "Moment":
+    def __radd__(
+        self, other: Union["Interval", "Moment"]
+    ) -> Union["Interval", "Moment"]:
         """moment + this -> moment"""
-        return Moment(other) + self
+        return self + other
 
     @dispatch
     def __sub__(self, other: LikeInterval) -> "Interval":

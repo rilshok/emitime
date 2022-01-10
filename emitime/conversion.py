@@ -33,6 +33,14 @@ def microseconds(value: SplitSeconds) -> int:
     )
 
 
+def is_time_str(value: str) -> bool:
+    raise NotImplementedError
+
+
+def is_moment_str(value: str) -> bool:
+    raise NotImplementedError
+
+
 def str_to_date(value: str) -> dt.date:
     if "-" in value:  # eng format
         ymd = value.split("-")
@@ -96,7 +104,8 @@ def datetime_to_str(value: dt.datetime) -> str:
     if t == dt.time():
         return date
     time = time_to_str(t)
-    return f"{date}d{time}".replace('+','')
+    return f"{date}d{time}".replace("+", "")
+
 
 def str_to_timedelta(value: str) -> dt.timedelta:
     try:
