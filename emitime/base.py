@@ -1,4 +1,6 @@
 import datetime as dt
+import time
+
 from typing import Any
 
 from plum import convert, dispatch
@@ -226,7 +228,7 @@ class Moment:
         return str(self)
 
     def __float__(self) -> float:
-        raise NotImplementedError
+        return time.mktime(self.datetime.timetuple())
 
 
 IntervalType.deliver(Interval)
