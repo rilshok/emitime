@@ -35,6 +35,11 @@ class Interval:
         return Moment(convert(other, dt.datetime) + self.timedelta)
 
     @dispatch
+    def __radd__(self, other: LikeMoment) -> "Moment":
+        """moment + interval -> moment"""
+        return Moment(convert(other, dt.datetime) + self.timedelta)
+
+    @dispatch
     def __sub__(self, other: LikeInterval) -> "Interval":
         """interval - interval -> interval"""
         return Interval(self.timedelta - convert(other, dt.timedelta))
