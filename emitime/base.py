@@ -143,6 +143,8 @@ class Interval:
     def __repr__(self) -> str:
         return str(self)
 
+    def __float__(self) -> float:
+        raise NotImplementedError
 
 class Moment:
     def __init__(self, value) -> None:
@@ -211,6 +213,9 @@ class Moment:
 
     def __repr__(self) -> str:
         return str(self)
+
+    def __float__(self) -> float:
+        raise NotImplementedError
 
 
 IntervalType.deliver(Interval)
