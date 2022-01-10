@@ -47,6 +47,11 @@ class Interval:
         return Interval(self.timedelta * other)
 
     @dispatch
+    def __rmul__(self, other: Number) -> "Interval":
+        """interval * Number -> interval"""
+        return self * other
+
+    @dispatch
     def __truediv__(self, other: LikeInterval) -> float:
         """interval / interval -> float"""
         return self.timedelta / convert(other, dt.timedelta)
