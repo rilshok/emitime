@@ -5,8 +5,11 @@ from typing import Union
 from plum import add_conversion_method
 
 Number = Union[int, float]
+
 SplitSeconds = namedtuple(
-    "SplitSeconds", ["d", "h", "m", "s", "ms", "us"], defaults=[0] * 6
+    "SplitSeconds",
+    ["d", "h", "m", "s", "ms", "us"],
+    defaults=(0, 0, 0, 0, 0, 0),
 )
 
 
@@ -31,14 +34,6 @@ def microseconds(value: SplitSeconds) -> int:
         + value.ms * 1_000
         + value.us
     )
-
-
-def is_time_str(value: str) -> bool:
-    raise NotImplementedError
-
-
-def is_moment_str(value: str) -> bool:
-    raise NotImplementedError
 
 
 def str_to_date(value: str) -> dt.date:
@@ -205,6 +200,24 @@ def str_to_datetime(value: str) -> dt.datetime:
         raise ValueError(need_format)
 
     return date_to_datetime(date) + time_to_timedelta(time)
+
+
+def is_time_str(value: str) -> bool:
+    try:
+        str_to_timedelta(value)
+    except Exception:
+        return False
+    return True
+
+
+def is_moment_str(value: str) -> bool:
+    if len(value) < 8:
+        return False
+    try:
+        str_to_datetime(value)
+    except Exception:
+        return False
+    return True
 
 
 def add_conversion_methods():
