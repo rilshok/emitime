@@ -1,11 +1,9 @@
 import datetime as dt
-from numbers import Real
 
 from plum import convert, dispatch
 
-from emitime.conversion import add_conversion_methods
+from emitime.conversion import Number, add_conversion_methods
 from plum.type import PromisedType, Union
-
 
 IntervalType = PromisedType()
 MomentType = PromisedType()
@@ -42,13 +40,13 @@ class Interval:
         return Interval(self.timedelta - convert(other, dt.timedelta))
 
     @dispatch
-    def __mul__(self, other: Real) -> "Interval":
-        """interval * Real -> interval"""
+    def __mul__(self, other: Number) -> "Interval":
+        """interval * Number -> interval"""
         return Interval(self.timedelta * other)
 
     @dispatch
-    def __rmul__(self, other: Real) -> "Interval":
-        """interval * Real -> interval"""
+    def __rmul__(self, other: Number) -> "Interval":
+        """interval * Number -> interval"""
         return self * other
 
     @dispatch
@@ -57,8 +55,8 @@ class Interval:
         return self.timedelta / convert(other, dt.timedelta)
 
     @dispatch
-    def __truediv__(self, other: Real) -> "Interval":
-        """interval / Real -> interval"""
+    def __truediv__(self, other: Number) -> "Interval":
+        """interval / Number -> interval"""
         return Interval(self.timedelta / other)
 
     @dispatch
