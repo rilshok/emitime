@@ -179,14 +179,16 @@ class Moment:
 
     @date.setter
     @dispatch
-    def date(self, value: Union[dt.date, str]) -> None:
+    def date(self, value: dt.date) -> None:
         if isinstance(value, dt.datetime):
             raise NotImplementedError
-        if isinstance(value, dt.date):
-            raise NotImplementedError
-        if isinstance(value, str):
-            raise NotImplementedError
         raise NotImplementedError
+
+    @date.setter
+    @dispatch
+    def date(self, value: str) -> None:
+        raise NotImplementedError
+
 
     @property
     def time(self) -> dt.time:
@@ -194,11 +196,12 @@ class Moment:
 
     @time.setter
     @dispatch
-    def time(self, value: Union[dt.time, str]) -> None:
-        if isinstance(value, dt.time):
-            raise NotImplementedError
-        if isinstance(value, str):
-            raise NotImplementedError
+    def time(self, value: dt.time) -> None:
+        raise NotImplementedError
+
+    @time.setter
+    @dispatch
+    def time(self, value: str) -> None:
         raise NotImplementedError
 
     @dispatch
