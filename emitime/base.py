@@ -268,6 +268,7 @@ class Moment:
         return str(self)
 
     def __float__(self) -> float:
+        # FIXME: microseconds are not converted
         return time.mktime(self.datetime.timetuple())
 
 
