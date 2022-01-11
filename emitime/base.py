@@ -173,6 +173,34 @@ class Moment:
     def datetime(self, value: LikeMoment) -> None:
         self._value = upM(value)
 
+    @property
+    def date(self) -> dt.date:
+        return self.datetime.date()
+
+    @date.setter
+    @dispatch
+    def date(self, value: Union[dt.date, str]) -> None:
+        if isinstance(value, dt.datetime):
+            raise NotImplementedError
+        if isinstance(value, dt.date):
+            raise NotImplementedError
+        if isinstance(value, str):
+            raise NotImplementedError
+        raise NotImplementedError
+
+    @property
+    def time(self) -> dt.time:
+        return self.datetime.time()
+
+    @time.setter
+    @dispatch
+    def time(self, value: Union[dt.time, str]) -> None:
+        if isinstance(value, dt.time):
+            raise NotImplementedError
+        if isinstance(value, str):
+            raise NotImplementedError
+        raise NotImplementedError
+
     @dispatch
     def __sub__(self, other: LikeMoment) -> Interval:
         """this - moment -> interval"""
