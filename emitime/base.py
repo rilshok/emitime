@@ -55,8 +55,9 @@ class Interval:
         return self._value
 
     @timedelta.setter
-    def timedelta(self, value) -> None:
-        self._value = convert(value, dt.timedelta)
+    @dispatch
+    def timedelta(self, value: LikeInterval) -> None:
+        self._value = upI(value)
 
     def __add__(
         self, other: Union["Interval", "Moment"]
@@ -168,8 +169,9 @@ class Moment:
         return self._value
 
     @datetime.setter
+    @dispatch
     def datetime(self, value: LikeMoment) -> None:
-        self._value = convert(value, dt.datetime)
+        self._value = upM(value)
 
     @dispatch
     def __sub__(self, other: LikeMoment) -> Interval:
