@@ -47,8 +47,12 @@ def is_moment(value: Any) -> bool:
 
 
 class Interval:
-    def __init__(self, value) -> None:
-        self.timedelta = value
+    def __init__(self, *args, **kwargs) -> None:
+        if kwargs:
+            raise NotImplementedError
+        if len(args) != 1:
+            raise NotImplementedError
+        self.timedelta = args[0]
 
     @property
     def timedelta(self) -> dt.timedelta:
@@ -161,8 +165,12 @@ class Interval:
 
 
 class Moment:
-    def __init__(self, value) -> None:
-        self.datetime = value
+    def __init__(self, *args, **kwargs) -> None:
+        if kwargs:
+            raise NotImplementedError
+        if len(args) != 1:
+            raise NotImplementedError
+        self.datetime = args[0]
 
     @property
     def datetime(self) -> dt.datetime:
