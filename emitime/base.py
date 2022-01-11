@@ -16,6 +16,7 @@ from emitime.conversion import (
 IntervalType = PromisedType()
 MomentType = PromisedType()
 
+# TODO: add float support
 LikeInterval = Union[str, dt.timedelta, dt.time, IntervalType]
 LikeMoment = Union[str, dt.date, dt.datetime, MomentType]
 
