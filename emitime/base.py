@@ -1,6 +1,5 @@
 import datetime as dt
 import time
-
 from typing import Any
 
 from plum import convert, dispatch
