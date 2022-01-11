@@ -189,7 +189,6 @@ class Moment:
     def date(self, value: str) -> None:
         raise NotImplementedError
 
-
     @property
     def time(self) -> dt.time:
         return self.datetime.time()
