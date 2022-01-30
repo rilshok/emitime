@@ -140,11 +140,6 @@ class Interval:
         return self.timedelta == upI(other)
 
     @dispatch
-    def __ne__(self, other: LikeInterval) -> bool:
-        """this != interval -> bool"""
-        return self.timedelta != upI(other)
-
-    @dispatch
     def __gt__(self, other: LikeInterval) -> bool:
         """this > interval -> bool"""
         return self.timedelta > upI(other)
@@ -245,11 +240,6 @@ class Moment:
     def __eq__(self, other: LikeMoment) -> bool:
         """this == moment -> bool"""
         return self.datetime == upM(other)
-
-    @dispatch
-    def __ne__(self, other: LikeMoment) -> bool:
-        """this != moment -> bool"""
-        return self.datetime != upM(other)
 
     @dispatch
     def __gt__(self, other: LikeMoment) -> bool:
