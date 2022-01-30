@@ -1,6 +1,6 @@
 import datetime as dt
 import time
-from typing import Any
+from typing import Any, Union as tUnion
 
 from plum import convert, dispatch
 from plum.type import PromisedType, Union
@@ -69,7 +69,7 @@ class Interval:
         """this + (interval|moment) -> (interval|moment)"""
         if is_interval(other):
             return Interval(self.timedelta + upI(other))
-        elif is_moment(other):
+        if is_moment(other):
             return Moment(upM(other) + self.timedelta)
         raise NotImplementedError
 
@@ -85,8 +85,8 @@ class Interval:
         return Interval(self.timedelta - upI(other))
 
     def __rsub__(
-        self, other: Union["Interval", "Moment"]
-    ) -> Union["Interval", "Moment"]:
+        self, other: tUnion["LikeInterval", "LikeMoment"]
+    ) -> tUnion["Interval", "Moment"]:
         """(interval|moment) - this -> (interval|moment)"""
         if is_interval(other):
             return Interval(upI(other) - self.timedelta)
@@ -206,15 +206,15 @@ class Moment:
     def time(self, value: str) -> None:
         raise NotImplementedError
 
-    @dispatch
-    def __sub__(self, other: LikeMoment) -> Interval:
-        """this - moment -> interval"""
-        return Interval(self.datetime - upM(other))
-
-    @dispatch
-    def __sub__(self, other: LikeInterval) -> "Moment":
-        """this - interval -> moment"""
-        return Moment(self.datetime - upI(other))
+    def __sub__(
+        self, other: tUnion["LikeInterval", "LikeMoment"]
+    ) -> tUnion["Interval", "Moment"]:
+        """this - (interval|moment) -> (moment|interval)"""
+        if is_interval(other):
+            return Moment(self.datetime - upI(other))
+        if is_moment(other):
+            return Interval(self.datetime - upM(other))
+        raise NotImplementedError
 
     @dispatch
     def __rsub__(self, other: LikeMoment) -> Interval:
@@ -225,6 +225,10 @@ class Moment:
     def __add__(self, other: LikeInterval) -> "Moment":
         """this + interval -> moment"""
         return Moment(self.datetime + upI(other))
+
+    def __radd__(self, other: LikeInterval) -> "Moment":
+        """interval + this -> moment"""
+        return self + other
 
     @dispatch
     def __lt__(self, other: LikeMoment) -> bool:
