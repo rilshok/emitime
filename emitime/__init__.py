@@ -1,1 +1,1 @@
-from emitime.base import Moment, Interval
+from emitime.base import Interval, Moment
