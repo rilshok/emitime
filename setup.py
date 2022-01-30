@@ -17,7 +17,9 @@ with open("README.md", "r") as fh:
 with open("requirements.txt", encoding="utf-8") as file:
     requirements = file.read().splitlines()
 
-package_data={name: ["py.typed", *map(lambda x: x.name, Path("emitime").rglob("*.pyi"))]}
+package_data = {
+    name: ["py.typed", *map(lambda x: x.name, Path("emitime").rglob("*.pyi"))]
+}
 
 setup(
     name=name,
