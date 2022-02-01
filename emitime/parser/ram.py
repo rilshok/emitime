@@ -2,7 +2,7 @@ import pickle
 from typing import Any, Callable, Dict
 
 import xxhash
-from emitime import Interval, Moment
+from emitime.base import Interval, Moment
 
 
 class ParserRAM:
