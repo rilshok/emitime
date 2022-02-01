@@ -10,6 +10,14 @@ Each of them can be fired from anything that looks like a calendar time point or
 pip install emitime
 ```
 
+Or from GitHub
+
+```
+git clone https://github.com/rilshok/emitime.git
+cd emitime
+pip install -e .
+```
+
 ## Usage
 
 A `Moment` object can be created by a `str`, datetime module objects such as `date` and `datetime`, or another `Moment`.
