@@ -24,10 +24,6 @@ with open("README.md", "r") as fh:
 with open("requirements.txt", encoding="utf-8") as file:
     requirements = file.read().splitlines()
 
-package_data = {
-    name: ["py.typed", *map(lambda x: x.name, Path("emitime").rglob("*.pyi"))]
-}
-
 setup(
     name=name,
     descriprion=descriprion,
@@ -40,7 +36,6 @@ setup(
     url="https://github.com/rilshok/emitime",
     packages=[name],
     include_package_data=True,
-    package_data=package_data,
     zip_safe=False,
     install_requires=requirements,
     classifiers=classifiers,
