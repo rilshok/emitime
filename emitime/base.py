@@ -163,6 +163,8 @@ class Interval:
     def __float__(self) -> float:
         raise NotImplementedError
 
+    def __hash__(self) -> int:
+        return hash(self.timedelta)
 
 class Moment:
     def __init__(self, *args, **kwargs) -> None:
@@ -270,6 +272,8 @@ class Moment:
         # FIXME: microseconds are not converted
         return time.mktime(self.datetime.timetuple())
 
+    def __hash__(self) -> int:
+        return hash(self.datetime)
 
 IntervalType.deliver(Interval)
 MomentType.deliver(Moment)
