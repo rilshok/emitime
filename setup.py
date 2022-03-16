@@ -16,17 +16,13 @@ classifiers = [
 ]
 
 version_path = Path(__file__).resolve().parent / name / "__version__.py"
-version = runpy.run_path(version_path)["__version__"]
+version = runpy.run_path(str(version_path))["__version__"]
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 with open("requirements.txt", encoding="utf-8") as file:
     requirements = file.read().splitlines()
-
-# package_data = {
-#     name: [*map(lambda x: x.name, Path("emitime").rglob("*"))]
-# }
 
 setup(
     name=name,
@@ -38,9 +34,8 @@ setup(
     author_email=author_email,
     version=version,
     url="https://github.com/rilshok/emitime",
-    packages=find_packages(include=('emitime',)),
+    packages=find_packages(include=(name,)),
     include_package_data=True,
-    # package_data=package_data,
     zip_safe=False,
     install_requires=requirements,
     classifiers=classifiers,
