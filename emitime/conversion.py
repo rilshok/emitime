@@ -112,7 +112,7 @@ def datetime_to_str(value: dt.datetime) -> str:
     if t == dt.time():
         return date
     time = time_to_str(t)
-    return f"{date}d{time}".replace("+", "")
+    return f"{date} {time}".replace("+", "")
 
 
 def str_to_timedelta(value: str) -> dt.timedelta:
@@ -192,13 +192,10 @@ def date_to_datetime(value: dt.date) -> dt.datetime:
 
 
 def str_to_datetime(value: str) -> dt.datetime:
-    """yyyy-mm-dd[^hh:mm[:ss[.ms['us]]]]"""
+    """yyyy-mm-dd[ hh:mm[:ss[.ms['us]]]]"""
     try:
-        if "^" in value or "d" in value:
-            if "^" in value:
-                split = value.split("^")
-            else:
-                split = value.split("d")
+        if " " in value:
+            split = value.split(" ")
             assert len(split) == 2
             date = str_to_date(split[0])
             time = str_to_time(split[1])
@@ -208,7 +205,7 @@ def str_to_datetime(value: str) -> dt.datetime:
 
     except Exception:
         need_format = (
-            "'value' does't match the format: yyyy-mm-dd[^hh:mm[:ss[.ms['us]]]]"
+            "'value' does't match the format: yyyy-mm-dd[ hh:mm[:ss[.ms['us]]]]"
         )
         raise ValueError(need_format)
 
