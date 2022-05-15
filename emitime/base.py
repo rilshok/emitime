@@ -161,7 +161,7 @@ class Interval:
         return str(self)
 
     def __float__(self) -> float:
-        raise NotImplementedError
+        return self.timedelta.total_seconds()
 
     def __hash__(self) -> int:
         return hash(self.timedelta)
