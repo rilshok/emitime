@@ -4,6 +4,7 @@ __all__ = (
 )
 
 import datetime as dt
+from sqlite3 import converters
 import time
 from typing import Any, Union as tUnion
 
@@ -182,11 +183,11 @@ class Moment:
         return self._value
 
     def __getstate__(self) -> float:
-        return self.datetime.timestamp()
+        return float(self)
 
-    def __setstate__(self, state: float) -> None:
+    def __setstate__(self, state) -> None:
         self.__dict__ = dict(
-            _value = dt.datetime.fromtimestamp(state)
+            _value = upM(state)
         )
 
     @datetime.setter
