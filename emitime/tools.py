@@ -8,7 +8,6 @@ def momentrange(start, stop, step) -> tp.Iterable[Moment]:
     start = Moment(start).datetime
     stop = Moment(stop).datetime
     step = Interval(step).timedelta
-    # return start, stop, step
     assert stop != start
     side = True
     if step.total_seconds() > 0.001:
