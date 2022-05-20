@@ -166,6 +166,9 @@ class Interval:
     def __hash__(self) -> int:
         return hash(self.timedelta)
 
+from pickle import dumps
+
+
 class Moment:
     def __init__(self, *args, **kwargs) -> None:
         if kwargs:
@@ -177,6 +180,14 @@ class Moment:
     @property
     def datetime(self) -> dt.datetime:
         return self._value
+
+    def __getstate__(self) -> float:
+        return self.datetime.timestamp()
+
+    def __setstate__(self, state: float) -> None:
+        self.__dict__ = dict(
+            _value = dt.datetime.fromtimestamp(state)
+        )
 
     @datetime.setter
     @dispatch
