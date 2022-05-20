@@ -229,6 +229,8 @@ def is_moment_str(value: str) -> bool:
         return False
     return True
 
+def float_to_datetime(value: float) -> dt.datetime:
+    return dt.datetime.fromtimestamp(value)
 
 def add_conversion_methods():
     from emitime.base import Interval, Moment
@@ -242,6 +244,7 @@ def add_conversion_methods():
     add_conversion_method(type_from=str, type_to=dt.datetime, f=str_to_datetime)
     add_conversion_method(type_from=dt.date, type_to=dt.datetime, f=date_to_datetime)
     add_conversion_method(type_from=Moment, type_to=dt.datetime, f=lambda x: x.datetime)
+    add_conversion_method(type_from=float, type_to=dt.datetime, f=float_to_datetime)
 
     add_conversion_method(type_from=dt.datetime, type_to=str, f=datetime_to_str)
     add_conversion_method(type_from=dt.timedelta, type_to=str, f=timedelta_to_str)
