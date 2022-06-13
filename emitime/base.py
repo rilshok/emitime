@@ -22,8 +22,8 @@ IntervalType = PromisedType()
 MomentType = PromisedType()
 
 # TODO: add float support
-LikeInterval = Union[str, dt.timedelta, dt.time, IntervalType]
-LikeMoment = Union[str, dt.date, dt.datetime, float, MomentType]
+LikeInterval = Union[float, int, str, dt.timedelta, dt.time, IntervalType]
+LikeMoment = Union[float, int, str, dt.date, dt.datetime,  MomentType]
 
 
 def upI(value: LikeInterval) -> dt.timedelta:

@@ -4,18 +4,19 @@ __all__ = (
     "time_to_timedelta",
     "timedelta_to_str",
     "datetime_to_str",
+    "float_to_timedelta",
     "str_to_timedelta",
     "timedelta_to_time",
     "str_to_time",
     "date_to_datetime",
-    "str_to_datetime"
+    "str_to_datetime",
 )
 
 import datetime as dt
 from collections import namedtuple
 from typing import Union
 
-from plum import add_conversion_method
+from plum import add_conversion_method  # type: ignore
 
 Number = Union[int, float]
 
@@ -115,6 +116,10 @@ def datetime_to_str(value: dt.datetime) -> str:
     return f"{date} {time}".replace("+", "")
 
 
+def float_to_timedelta(value) -> dt.timedelta:
+    return dt.timedelta(seconds=value)
+
+
 def str_to_timedelta(value: str) -> dt.timedelta:
     try:
         sign = 1.0
@@ -191,6 +196,10 @@ def date_to_datetime(value: dt.date) -> dt.datetime:
     return dt.datetime(value.year, value.month, value.day)
 
 
+def float_to_datetime(value: float) -> dt.datetime:
+    return dt.datetime.fromtimestamp(value)
+
+
 def str_to_datetime(value: str) -> dt.datetime:
     """yyyy-mm-dd[ hh:mm[:ss[.ms['us]]]]"""
     try:
@@ -229,22 +238,23 @@ def is_moment_str(value: str) -> bool:
         return False
     return True
 
-def float_to_datetime(value: float) -> dt.datetime:
-    return dt.datetime.fromtimestamp(value)
 
 def add_conversion_methods():
     from emitime.base import Interval, Moment
 
+    add_conversion_method(type_from=int, type_to=dt.timedelta, f=float_to_timedelta)
+    add_conversion_method(type_from=float, type_to=dt.timedelta, f=float_to_timedelta)
     add_conversion_method(type_from=str, type_to=dt.timedelta, f=str_to_timedelta)
     add_conversion_method(type_from=dt.time, type_to=dt.timedelta, f=time_to_timedelta)
     add_conversion_method(
         type_from=Interval, type_to=dt.timedelta, f=lambda x: x.timedelta
     )
 
+    add_conversion_method(type_from=int, type_to=dt.datetime, f=float_to_datetime)
+    add_conversion_method(type_from=float, type_to=dt.datetime, f=float_to_datetime)
     add_conversion_method(type_from=str, type_to=dt.datetime, f=str_to_datetime)
     add_conversion_method(type_from=dt.date, type_to=dt.datetime, f=date_to_datetime)
     add_conversion_method(type_from=Moment, type_to=dt.datetime, f=lambda x: x.datetime)
-    add_conversion_method(type_from=float, type_to=dt.datetime, f=float_to_datetime)
 
     add_conversion_method(type_from=dt.datetime, type_to=str, f=datetime_to_str)
     add_conversion_method(type_from=dt.timedelta, type_to=str, f=timedelta_to_str)
