@@ -1,4 +1,4 @@
 pytest
-plum-dispatch
+plum-dispatch==1.6
 xxhash
 types-xxhash
